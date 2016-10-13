@@ -21,7 +21,7 @@ public class Usuario {
 
     public int getId() {
 
-        return id;
+        return this.id;
     }
 
     public String getNome() {
@@ -37,6 +37,17 @@ public class Usuario {
     public void setNome(String nome) {
 
         this.nome = nome;
+    }
+
+    @Override
+    public String toString() {
+
+        return String.format(
+            "#%d: %s",
+
+            this.getId(),
+            this.getNome());
+
     }
 
 }

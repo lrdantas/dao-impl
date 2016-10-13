@@ -1,14 +1,14 @@
+
 package io.dao;
 
-
-
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
+import io.dao.impl.DAOException;
 import io.dao.impl.IDAO;
+
 import io.dao.mysql.UsuarioDAO;
+
 import io.model.Usuario;
 
 /**
@@ -18,37 +18,41 @@ public class App {
 
     /**
      * @param args
+     * @throws DAOException
      * @throws SQLException
      */
     public static void main(String[] args)
-        throws Exception {
+        throws DAOException {
 
         Connection connection;
 
-        Properties props = new Properties();
-        props.put("user", "horusweb");
-        props.put("password", "");
-        //props.put("useLegacyDatetimeCode", false);
-        props.put("serverTimezone", "America/Fortaleza");
-
-        // Class.forName("com.mysql.cj.jdbc.Driver");
-
         try {
 
-            connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:4040/dao_testing",
-                props);
+            connection = ConnectionFactory.getInstance().openConnection();
 
         } catch (SQLException e) {
 
-            throw e;
+            e.printStackTrace();
+
+            System.exit(-1);
+
+            return;
 
         }
 
         IDAO<Usuario> dao = new UsuarioDAO(connection);
+
         Usuario u1 = new Usuario("José Augusto");
 
         dao.save(u1);
+
+        for (Usuario usuario : dao.findAll(0, 3)) {
+
+            System.out.println(usuario);
+
+            dao.remove(usuario);
+
+        }
 
     }
 
