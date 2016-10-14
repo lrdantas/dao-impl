@@ -14,8 +14,8 @@ USE `dao_testing`;
 
 CREATE TABLE IF NOT EXISTS `usuario` (
 
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(50) DEFAULT NULL,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) DEFAULT NULL,
 
   PRIMARY KEY (`id`)
 

@@ -14,7 +14,6 @@ import io.dao.common.IDAO;
 
 /**
  * @author José Nascimento <joseaugustodearaujonascimento@gmail.com>
- *
  */
 public abstract class JdbcDAO<T> implements IDAO<T> {
 
@@ -29,7 +28,8 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
     }
 
     @Override
-    public void close() throws DAOException {
+    public void close()
+        throws DAOException {
 
         this.connection = null;
 
@@ -148,7 +148,8 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
     }
 
     @Override
-    public void save(T obj) throws DAOException {
+    public void save(T obj)
+        throws DAOException {
 
         try {
 

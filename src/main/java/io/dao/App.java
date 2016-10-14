@@ -25,7 +25,6 @@ public class App {
 
         try {
 
-
             for (int i = 0; i < 1; i++) {
 
                 new MainThread().start();
