@@ -13,7 +13,7 @@ import io.dao.common.DatabaseAccessException;
  */
 public abstract class EntityIterator<T> implements Iterator<T> {
 
-    protected final ResultSet resultSet;
+    private final ResultSet resultSet;
 
     private boolean initialized;
     private boolean hasNext;
@@ -24,7 +24,7 @@ public abstract class EntityIterator<T> implements Iterator<T> {
 
     }
 
-    protected abstract T fetchCurrent()
+    protected abstract T fetchCurrent(ResultSet rs)
         throws SQLException;
 
     @Override
@@ -59,7 +59,7 @@ public abstract class EntityIterator<T> implements Iterator<T> {
 
         try {
 
-            obj = this.fetchCurrent();
+            obj = this.fetchCurrent(this.resultSet);
 
             this.hasNext = this.resultSet.next();
 
@@ -75,6 +75,7 @@ public abstract class EntityIterator<T> implements Iterator<T> {
         }
 
         return obj;
+
     }
 
 }

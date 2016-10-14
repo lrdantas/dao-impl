@@ -18,13 +18,13 @@ public class UsuarioIterator extends EntityIterator<Usuario> {
     }
 
     @Override
-    protected Usuario fetchCurrent()
+    protected Usuario fetchCurrent(ResultSet rs)
         throws SQLException {
 
         Usuario usuario = new Usuario();
 
-        usuario.setId(this.resultSet.getInt(1));
-        usuario.setNome(this.resultSet.getString(2));
+        usuario.setId(rs.getInt("id"));
+        usuario.setNome(rs.getString("nome"));
 
         return usuario;
 
