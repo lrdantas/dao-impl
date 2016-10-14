@@ -35,7 +35,7 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
 
     }
 
-    protected abstract Iterable<T> doFindAll(long page, long count)
+    protected abstract Iterator<T> doFindAll(long page, long count)
         throws SQLException;
 
     protected abstract void doRemove(int id)
@@ -56,15 +56,26 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
     public Iterable<T> findAll(long page, long count)
         throws DAOException {
 
-        try {
-            return this.doFindAll(page, count);
-        } catch (SQLException e) {
+        return new Iterable<T>() {
 
-            e.printStackTrace();
+            @Override
+            public Iterator<T> iterator() {
 
-            throw new DAOException("Erro ao buscar", e);
+                try {
 
-        }
+                    return JdbcDAO.this.doFindAll(page, count);
+
+                } catch (SQLException e) {
+
+                    e.printStackTrace();
+
+                    throw new DatabaseAccessException("Erro ao buscar", e);
+
+                }
+
+            }
+
+        };
 
     }
 

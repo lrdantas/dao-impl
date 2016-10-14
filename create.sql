@@ -22,3 +22,46 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 )
 
 ;
+
+
+CREATE TABLE IF NOT EXISTS `endereco` (
+
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+
+  `logradouro` VARCHAR(100) NOT NULL,
+  `numero` VARCHAR(100) NOT NULL,
+  `bairro` VARCHAR(100) NOT NULL,
+
+  `cidade` VARCHAR(100) NOT NULL,
+  `uf` CHAR(2) NOT NULL,
+
+  PRIMARY KEY (`id`)
+
+)
+
+;
+
+CREATE TABLE IF NOT EXISTS `usuario_endereco` (
+
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+
+  `usuario_id` INT UNSIGNED NOT NULL,
+  `endereco_id` INT UNSIGNED NOT NULL,
+
+  PRIMARY KEY (`id`),
+
+  CONSTRAINT `fk_endereco_usuario__usuario`
+    FOREIGN KEY (`usuario_id`)
+    REFERENCES `usuario` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+
+  CONSTRAINT `fk_endereco_usuario__endereco`
+    FOREIGN KEY (`endereco_id`)
+    REFERENCES `endereco` (`id`)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+
+)
+
+;

@@ -7,13 +7,20 @@ package io.model;
 public class Usuario {
 
     private int id;
+
     private String nome;
+    private Iterable<Endereco> enderecos;
 
     public Usuario() { }
 
     public Usuario(String nome) {
 
         this.nome = nome;
+    }
+
+    public Iterable<Endereco> getEnderecos() {
+
+        return enderecos;
     }
 
     public int getId() {
@@ -24,6 +31,11 @@ public class Usuario {
     public String getNome() {
 
         return nome;
+    }
+
+    public void setEnderecos(Iterable<Endereco> enderecos) {
+
+        this.enderecos = enderecos;
     }
 
     public void setId(int id) {

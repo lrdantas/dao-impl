@@ -19,9 +19,13 @@ import io.model.Usuario;
  */
 public class UsuarioDAO extends JdbcDAO<Usuario> {
 
+    private EnderecoDAO enderecoDAO;
+
     public UsuarioDAO(Connection connection) {
 
         super(connection);
+
+        this.enderecoDAO = new EnderecoDAO(connection);
 
     }
 
@@ -34,7 +38,7 @@ public class UsuarioDAO extends JdbcDAO<Usuario> {
     }
 
     @Override
-    protected Iterable<Usuario> doFindAll(long page, long count)
+    protected Iterator<Usuario> doFindAll(long page, long count)
         throws SQLException {
 
         String query = ""
@@ -42,7 +46,7 @@ public class UsuarioDAO extends JdbcDAO<Usuario> {
             + "FROM usuario "
             + "LIMIT ?, ?";
 
-        ResultSet rs;
+        ResultSet resultSet;
         PreparedStatement stmt;
 
         try {
@@ -52,7 +56,7 @@ public class UsuarioDAO extends JdbcDAO<Usuario> {
             stmt.setLong(1, page);
             stmt.setLong(2, count);
 
-            rs = stmt.executeQuery();
+            resultSet = stmt.executeQuery();
 
         } catch (SQLException e) {
 
@@ -61,7 +65,7 @@ public class UsuarioDAO extends JdbcDAO<Usuario> {
             throw new DatabaseAccessException(e.getMessage(), e);
         }
 
-        return super.iterable(rs);
+        return this.iterator(resultSet);
 
     }
 
