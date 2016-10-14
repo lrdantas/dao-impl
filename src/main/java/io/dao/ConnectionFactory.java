@@ -16,7 +16,8 @@ public abstract class ConnectionFactory {
 
         private static ConnectionFactory createConnectionFactory() {
 
-            return new MySqlLocalConnectionFactory();
+            // return new MySqlLocalConnectionFactory();
+            return new HikariCPConnectionFactory();
 
         }
 
