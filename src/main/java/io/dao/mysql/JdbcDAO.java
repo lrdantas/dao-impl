@@ -84,8 +84,13 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
     protected PreparedStatement getStmtSave(String query)
         throws SQLException {
 
-        if (this.stmtSave == null)
-            this.stmtSave = this.getConnection().prepareStatement(query);
+        if (this.stmtSave == null) {
+
+            this.stmtSave = this.getConnection().prepareStatement(
+                query,
+                PreparedStatement.RETURN_GENERATED_KEYS);
+
+        }
 
         return this.stmtSave;
 

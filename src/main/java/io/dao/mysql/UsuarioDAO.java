@@ -98,14 +98,29 @@ public class UsuarioDAO extends JdbcDAO<Usuario> {
 
         PreparedStatement stmt = this.getStmtSave(query);
 
-        if (obj.getId() == 0)
+        if (obj.getId() == 0) {
+
             stmt.setNull(1, Types.BIGINT);
-        else
+
+        } else {
+
             stmt.setLong(1, obj.getId());
+
+        }
 
         stmt.setString(2, obj.getNome());
 
         int affetectRows = stmt.executeUpdate();
+
+        ResultSet generatedKeys = stmt.getGeneratedKeys();
+
+        if (obj.getId() == 0 && generatedKeys != null) {
+
+            generatedKeys.next();
+
+            obj.setId(generatedKeys.getInt(1));
+
+        }
 
         System.out.println(String.format(
             "Affected rows: %d",
