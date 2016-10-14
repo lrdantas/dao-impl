@@ -4,6 +4,8 @@ package io.dao;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import java.util.UUID;
+
 import io.dao.common.DAOException;
 import io.dao.common.IDAO;
 
@@ -16,21 +18,13 @@ import io.model.Usuario;
  */
 public class App {
 
-    /**
-     * @param args
-     * @throws DAOException
-     * @throws SQLException
-     */
-    public static void main(String[] args)
-        throws DAOException {
-
-        Connection connection;
+    public static void main(String[] args) {
 
         try {
 
-            connection = ConnectionFactory.getInstance().openConnection();
+            new App().run(ConnectionFactory.getInstance());
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
 
@@ -40,13 +34,20 @@ public class App {
 
         }
 
+    }
+
+    private void run(ConnectionFactory connectionFactory)
+        throws DAOException, SQLException {
+
+        Connection connection = connectionFactory.openConnection();
+
         IDAO<Usuario> dao = new UsuarioDAO(connection);
 
-        Usuario u1 = new Usuario("José Augusto");
+        Usuario u1 = new Usuario("José Augusto #" + UUID.randomUUID());
 
         dao.save(u1);
 
-        for (Usuario usuario : dao.findAll(0, 3)) {
+        for (Usuario usuario : dao.findAll()) {
 
             System.out.println(usuario);
 

@@ -115,9 +115,9 @@ public class UsuarioDAO extends JdbcDAO<Usuario> {
     }
 
     @Override
-    protected Iterator<Usuario> iterator(final ResultSet rs) {
+    protected Iterator<Usuario> iterator(ResultSet resultSet) {
 
-        return new UsuarioIterator(rs);
+        return new UsuarioIterator(resultSet);
 
     }
 

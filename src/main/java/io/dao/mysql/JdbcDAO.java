@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.Iterator;
 
 import io.dao.common.DAOException;
@@ -105,7 +106,7 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
 
     }
 
-    protected abstract Iterator<T> iterator(ResultSet rs);
+    protected abstract Iterator<T> iterator(ResultSet resultSet);
 
     protected PreparedStatement prepare(String query) {
 

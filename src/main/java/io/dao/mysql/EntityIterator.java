@@ -24,7 +24,7 @@ public abstract class EntityIterator<T> implements Iterator<T> {
 
     }
 
-    protected abstract T fetchCurrent(ResultSet rs)
+    protected abstract T fetchCurrent(ResultSet resultSet)
         throws SQLException;
 
     @Override

@@ -1,11 +1,8 @@
-/**
- *
- */
+
 package io.model;
 
 /**
  * @author José Nascimento <joseaugustodearaujonascimento@gmail.com>
- *
  */
 public class Usuario {
 
