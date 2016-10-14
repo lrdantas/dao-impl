@@ -9,8 +9,8 @@ import java.sql.Types;
 
 import java.util.Iterator;
 
-import io.dao.impl.DAOException;
-import io.dao.impl.DatabaseAccessException;
+import io.dao.common.DAOException;
+import io.dao.common.DatabaseAccessException;
 
 import io.model.Usuario;
 

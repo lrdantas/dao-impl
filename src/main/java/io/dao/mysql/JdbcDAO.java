@@ -7,9 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 
-import io.dao.impl.DAOException;
-import io.dao.impl.DatabaseAccessException;
-import io.dao.impl.IDAO;
+import io.dao.common.DAOException;
+import io.dao.common.DatabaseAccessException;
+import io.dao.common.IDAO;
 
 /**
  * @author José Nascimento <joseaugustodearaujonascimento@gmail.com>

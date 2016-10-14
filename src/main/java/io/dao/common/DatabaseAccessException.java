@@ -1,9 +1,8 @@
 
-package io.dao.impl;
+package io.dao.common;
 
 /**
  * @author José Nascimento <joseaugustodearaujonascimento@gmail.com>
- *
  */
 public class DatabaseAccessException extends RuntimeException {
 

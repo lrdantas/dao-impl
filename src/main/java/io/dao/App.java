@@ -4,8 +4,8 @@ package io.dao;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import io.dao.impl.DAOException;
-import io.dao.impl.IDAO;
+import io.dao.common.DAOException;
+import io.dao.common.IDAO;
 
 import io.dao.mysql.UsuarioDAO;
 
