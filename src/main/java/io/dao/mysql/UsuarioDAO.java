@@ -44,28 +44,33 @@ public class UsuarioDAO extends JdbcDAO<Usuario> {
         String query = ""
             + "SELECT id, nome "
             + "FROM usuario "
-            + "LIMIT ?, ?";
+            + "LIMIT ?, ? ";
 
-        ResultSet resultSet;
-        PreparedStatement stmt;
-
-        try {
-
-            stmt = this.getConnection().prepareStatement(query);
-
-            stmt.setLong(1, page);
-            stmt.setLong(2, count);
-
-            resultSet = stmt.executeQuery();
-
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-
-            throw new DatabaseAccessException(e.getMessage(), e);
-        }
+        ResultSet resultSet = super.executeFind(query, page, count);
 
         return this.iterator(resultSet);
+
+    }
+
+    @Override
+    protected Usuario doFindById(Object id)
+        throws SQLException {
+
+        String query = ""
+            + "SELECT id, nome "
+            + "FROM usuario "
+            + "WHERE id = ? ";
+
+        ResultSet resultSet = super.executeFind(query, (Integer)id);
+
+        for (Usuario usuario : this.iterable(resultSet)) {
+
+            return usuario;
+
+        }
+
+        // TODO Jogar NotFoundException
+        return null;
 
     }
 

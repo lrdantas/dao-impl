@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS `endereco` (
 
   `cidade` VARCHAR(100) NOT NULL,
   `uf` CHAR(2) NOT NULL,
+  `cep` CHAR(8) NOT NULL,
 
   PRIMARY KEY (`id`)
 

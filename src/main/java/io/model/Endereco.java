@@ -15,41 +15,53 @@ public class Endereco {
     private String cidade;
     private String uf;
 
+    private String cep;
+
     public Endereco() { }
 
     public String getBairro() {
 
-        return bairro;
+        return this.bairro;
+    }
+
+    public String getCep() {
+
+        return this.cep;
     }
 
     public String getCidade() {
 
-        return cidade;
+        return this.cidade;
     }
 
     public int getId() {
 
-        return id;
+        return this.id;
     }
 
     public String getLogradouro() {
 
-        return logradouro;
+        return this.logradouro;
     }
 
     public String getNumero() {
 
-        return numero;
+        return this.numero;
     }
 
     public String getUf() {
 
-        return uf;
+        return this.uf;
     }
 
     public void setBairro(String bairro) {
 
         this.bairro = bairro;
+    }
+
+    public void setCep(String cep) {
+
+        this.cep = cep;
     }
 
     public void setCidade(String cidade) {
@@ -75,6 +87,22 @@ public class Endereco {
     public void setUf(String uf) {
 
         this.uf = uf;
+    }
+
+    @Override
+    public String toString() {
+
+        return String.format(
+            "%s, %s - %s : %s/ %s %s",
+
+            this.getLogradouro(),
+            this.getNumero(),
+            this.getBairro(),
+
+            this.getCidade(),
+            this.getUf(),
+            this.getCep());
+
     }
 
 }

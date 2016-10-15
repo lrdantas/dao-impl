@@ -38,11 +38,76 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
     protected abstract Iterator<T> doFindAll(long page, long count)
         throws SQLException;
 
+    protected abstract T doFindById(Object id)
+        throws SQLException;
+
     protected abstract void doRemove(int id)
         throws SQLException;
 
     protected abstract void doSave(T obj)
         throws SQLException;
+
+    protected ResultSet executeFind(String query, Object...args) {
+
+        PreparedStatement stmt;
+
+        try {
+
+            stmt = this.getConnection().prepareStatement(query);
+
+            for (int i = 0; i < args.length; i++) {
+
+                int paramIndex = i + 1;
+
+                Object arg = args[i];
+
+                if (arg instanceof Integer) {
+
+                    stmt.setInt(paramIndex, (Integer) arg);
+
+                } else if (arg instanceof String) {
+
+                    stmt.setString(paramIndex, (String) arg);
+
+                } else if (arg instanceof Long) {
+
+                    stmt.setLong(paramIndex, (Long) arg);
+
+                }
+
+            }
+
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+            throw new DatabaseAccessException(e.getMessage(), e);
+
+        }
+
+        return this.executeQuery(stmt);
+
+    }
+
+    protected ResultSet executeQuery(PreparedStatement stmt) {
+
+        ResultSet resultSet;
+
+        try {
+
+            resultSet = stmt.executeQuery();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+            throw new DatabaseAccessException(e.getMessage(), e);
+        }
+
+        return resultSet;
+
+    }
 
     @Override
     public Iterable<T> findAll()
@@ -83,7 +148,18 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
     public T findById(Object id)
         throws DAOException {
 
-        return null;
+        try {
+
+            return this.doFindById(id);
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+            throw new DAOException("Erro ao buscar por id", e);
+
+        }
+
     }
 
     protected Connection getConnection() {
@@ -107,14 +183,14 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
 
     }
 
-    protected Iterable<T> iterable(final ResultSet rs) {
+    protected Iterable<T> iterable(final ResultSet resultSet) {
 
         return new Iterable<T>() {
 
             @Override
             public Iterator<T> iterator() {
 
-                return JdbcDAO.this.iterator(rs);
+                return JdbcDAO.this.iterator(resultSet);
 
             }
 
@@ -170,7 +246,7 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
 
             e.printStackTrace();
 
-            throw new DAOException("Falha ao salvar usuário", e);
+            throw new DAOException("Falha ao salvar", e);
 
         }
 

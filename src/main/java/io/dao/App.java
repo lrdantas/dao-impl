@@ -5,13 +5,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import io.dao.common.DAOException;
 import io.dao.common.IDAO;
-
+import io.dao.mysql.EnderecoDAO;
 import io.dao.mysql.UsuarioDAO;
-
+import io.model.Endereco;
 import io.model.Usuario;
 
 /**
@@ -48,8 +49,10 @@ public class App {
 
         int size = 5;
 
-        IDAO<Usuario> dao = new UsuarioDAO(connection);
-        Collection<Usuario> cache = new ArrayList<Usuario>(size);
+        UsuarioDAO usuarioDAO = new UsuarioDAO(connection);
+        EnderecoDAO enderecoDAO = new EnderecoDAO(connection);
+
+        List<Usuario> cache = new ArrayList<Usuario>(size);
 
         System.out.println("\n:: Inserindo usuários de teste");
 
@@ -57,7 +60,7 @@ public class App {
 
             Usuario usuario = new Usuario("José Augusto #" + UUID.randomUUID());
 
-            dao.save(usuario);
+            usuarioDAO.save(usuario);
 
             cache.add(usuario);
 
@@ -65,9 +68,17 @@ public class App {
 
         }
 
+        Iterable<Endereco> enderecos = enderecoDAO.findByUsuario(usuarioDAO.findById(1));
+
+        for (Endereco endereco : enderecos) {
+
+            System.out.println(endereco);
+
+        }
+
         System.out.println("\n:: Listando alguns Usuários Cadastrados");
 
-        for (Usuario usuario : dao.findAll(0, 3)) {
+        for (Usuario usuario : usuarioDAO.findAll(0, 3)) {
 
             System.out.println(usuario);
 
@@ -79,7 +90,7 @@ public class App {
 
             System.out.println(usuario);
 
-            dao.remove(usuario);
+            // usuarioDAO.remove(usuario);
 
         }
 

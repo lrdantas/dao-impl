@@ -1,6 +1,8 @@
 
 package io.model;
 
+import java.util.Collection;
+
 /**
  * @author José Nascimento <joseaugustodearaujonascimento@gmail.com>
  */
@@ -9,18 +11,20 @@ public class Usuario {
     private int id;
 
     private String nome;
-    private Iterable<Endereco> enderecos;
+
+    private Collection<Endereco> enderecos;
 
     public Usuario() { }
 
     public Usuario(String nome) {
 
         this.nome = nome;
+
     }
 
     public Iterable<Endereco> getEnderecos() {
 
-        return enderecos;
+        return this.enderecos;
     }
 
     public int getId() {
@@ -30,12 +34,18 @@ public class Usuario {
 
     public String getNome() {
 
-        return nome;
+        return this.nome;
     }
 
-    public void setEnderecos(Iterable<Endereco> enderecos) {
+    public void setEnderecos(Collection<Endereco> enderecos) {
 
         this.enderecos = enderecos;
+    }
+
+    public void addEndereco(Endereco endereco) {
+
+        this.enderecos.add(endereco);
+
     }
 
     public void setId(int id) {
