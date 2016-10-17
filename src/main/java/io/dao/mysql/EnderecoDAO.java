@@ -28,7 +28,7 @@ public class EnderecoDAO extends JdbcDAO<Endereco> {
 
         String query = ""
             + "SELECT e.id, e.logradouro, e.numero, e.bairro, e.cidade, e.uf, e.cep "
-            + "FROM endereco e"
+            + "FROM endereco e "
             + "LIMIT ?, ? ";
 
         ResultSet resultSet = super.executeFind(query, page, count);
