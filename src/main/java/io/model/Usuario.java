@@ -2,6 +2,7 @@
 package io.model;
 
 import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * @author José Nascimento <joseaugustodearaujonascimento@gmail.com>
@@ -43,6 +44,9 @@ public class Usuario {
     }
 
     public void addEndereco(Endereco endereco) {
+
+        if (this.enderecos == null)
+            this.enderecos = new LinkedList<Endereco>();
 
         this.enderecos.add(endereco);
 
