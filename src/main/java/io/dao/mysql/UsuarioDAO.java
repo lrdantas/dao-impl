@@ -10,7 +10,6 @@ import java.sql.Types;
 import java.util.Iterator;
 
 import io.dao.common.DAOException;
-import io.dao.common.DatabaseAccessException;
 
 import io.model.Usuario;
 
@@ -42,8 +41,10 @@ public class UsuarioDAO extends JdbcDAO<Usuario> {
         throws SQLException {
 
         String query = ""
-            + "SELECT id, nome "
-            + "FROM usuario "
+            + "SELECT u.id, u.nome "
+
+            + "FROM usuario u "
+
             + "LIMIT ?, ? ";
 
         ResultSet resultSet = super.executeFind(query, page, count);
@@ -57,9 +58,11 @@ public class UsuarioDAO extends JdbcDAO<Usuario> {
         throws SQLException {
 
         String query = ""
-            + "SELECT id, nome "
-            + "FROM usuario "
-            + "WHERE id = ? ";
+            + "SELECT u.id, u.nome "
+
+            + "FROM usuario u "
+
+            + "WHERE u.id = ? ";
 
         ResultSet resultSet = super.executeFind(query, (Integer)id);
 

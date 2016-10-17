@@ -15,7 +15,7 @@ public abstract class EntityIterator<T> implements Iterator<T> {
 
     private final ResultSet resultSet;
 
-    private boolean initialized;
+    private boolean isInitialized;
     private boolean hasNext;
 
     public EntityIterator(ResultSet resultSet) {
@@ -30,9 +30,9 @@ public abstract class EntityIterator<T> implements Iterator<T> {
     @Override
     public boolean hasNext() {
 
-        if (!this.initialized) {
+        if (!this.isInitialized) {
 
-            this.initialized = true;
+            this.isInitialized = true;
 
             try {
 

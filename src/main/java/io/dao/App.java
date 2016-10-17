@@ -3,15 +3,16 @@ package io.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 import io.dao.common.DAOException;
-import io.dao.common.IDAO;
+
 import io.dao.mysql.EnderecoDAO;
 import io.dao.mysql.UsuarioDAO;
+
 import io.model.Endereco;
 import io.model.Usuario;
 

@@ -62,10 +62,13 @@ public class EnderecoDAO extends JdbcDAO<Endereco> {
 
         String query = ""
             + "SELECT e.id, e.logradouro, e.numero, e.bairro, e.cidade, e.uf, e.cep "
+
             + "FROM endereco e "
+
             + "INNER JOIN usuario_endereco eu "
             + "ON eu.endereco_id = e.id "
-            + "WHERE usuario_id = ? ";
+
+            + "WHERE eu.usuario_id = ? ";
 
         ResultSet resultSet = super.executeFind(query, usuario.getId());
 
