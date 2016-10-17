@@ -28,7 +28,9 @@ public class EnderecoDAO extends JdbcDAO<Endereco> {
 
         String query = ""
             + "SELECT e.id, e.logradouro, e.numero, e.bairro, e.cidade, e.uf, e.cep "
+
             + "FROM endereco e "
+
             + "LIMIT ?, ? ";
 
         ResultSet resultSet = super.executeFind(query, page, count);
@@ -41,7 +43,23 @@ public class EnderecoDAO extends JdbcDAO<Endereco> {
     protected Endereco doFindById(Object id)
         throws SQLException {
 
+        String query = ""
+            + "SELECT e.id, e.logradouro, e.numero, e.bairro, e.cidade, e.uf, e.cep "
+
+            + "FROM endereco e "
+
+            + "WHERE e.id = ? ";
+
+        ResultSet resultSet = super.executeFind(query, id);
+
+        for (Endereco endereco : this.iterable(resultSet)) {
+
+            return endereco;
+
+        }
+
         return null;
+
     }
 
     @Override

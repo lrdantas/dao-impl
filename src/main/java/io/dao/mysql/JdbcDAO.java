@@ -118,7 +118,7 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
     }
 
     @Override
-    public Iterable<T> findAll(long page, long count)
+    public Iterable<T> findAll(final long page, final long count)
         throws DAOException {
 
         return new Iterable<T>() {
