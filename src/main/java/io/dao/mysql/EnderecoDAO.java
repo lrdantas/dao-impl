@@ -2,8 +2,10 @@
 package io.dao.mysql;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Iterator;
 
 import io.dao.common.DAOException;
@@ -66,14 +68,69 @@ public class EnderecoDAO extends JdbcDAO<Endereco> {
     protected void doRemove(int id)
         throws SQLException {
 
-        //
+        String query = "DELETE FROM endereco WHERE id = ?";
+
+        PreparedStatement stmt;
+
+        stmt = this.prepare(query);
+
+        stmt.setLong(1, id);
+
+        int affectedRows = stmt.executeUpdate();
+
+        System.out.println(String.format(
+            "Affected rows: %d",
+
+            affectedRows));
+
     }
 
     @Override
     protected void doSave(Endereco obj)
         throws SQLException {
 
-        //
+        String query = ""
+            + "INSERT INTO endereco (id, logradouro, numero, bairro, cidade, uf, cep) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?) "
+            + "ON DUPLICATE KEY UPDATE "
+            + "  logradouro = VALUES(logradouro), "
+            + "  numero = VALUES(numero), "
+            + "  bairro = VALUES(bairro), "
+            + "  cidade = VALUES(cidade), "
+            + "  uf = VALUES(uf), "
+            + "  cep = VALUES(cep) ";
+
+        PreparedStatement stmt = this.getStmtSave(query);
+
+        if (obj.getId() == 0) {
+
+            stmt.setNull(1, Types.BIGINT);
+
+        } else {
+
+            stmt.setLong(1, obj.getId());
+
+        }
+
+        stmt.setString(2, obj.getLogradouro());
+        stmt.setString(3, obj.getNumero());
+        stmt.setString(4, obj.getBairro());
+        stmt.setString(5, obj.getCidade());
+        stmt.setString(6, obj.getUf());
+        stmt.setString(7, obj.getCep());
+
+        int affectedRows = stmt.executeUpdate();
+
+        ResultSet generatedKeys = stmt.getGeneratedKeys();
+
+        if (obj.getId() == 0 && generatedKeys != null) {
+
+            generatedKeys.next();
+
+            obj.setId(generatedKeys.getInt(1));
+
+        }
+
     }
 
     public Iterable<Endereco> findByUsuario(Usuario usuario) {
@@ -105,7 +162,8 @@ public class EnderecoDAO extends JdbcDAO<Endereco> {
     public void remove(Endereco obj)
         throws DAOException {
 
-        //
+        super.removeById(obj.getId());
+
     }
 
 }

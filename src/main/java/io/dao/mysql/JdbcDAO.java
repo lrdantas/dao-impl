@@ -27,27 +27,7 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
 
     }
 
-    @Override
-    public void close()
-        throws DAOException {
-
-        this.connection = null;
-
-    }
-
-    protected abstract Iterator<T> doFindAll(long page, long count)
-        throws SQLException;
-
-    protected abstract T doFindById(Object id)
-        throws SQLException;
-
-    protected abstract void doRemove(int id)
-        throws SQLException;
-
-    protected abstract void doSave(T obj)
-        throws SQLException;
-
-    protected ResultSet executeFind(String query, Object...args) {
+    protected PreparedStatement bindStatement(String query, Object... args) {
 
         PreparedStatement stmt;
 
@@ -85,6 +65,34 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
             throw new DatabaseAccessException(e.getMessage(), e);
 
         }
+
+        return stmt;
+
+    }
+
+    @Override
+    public void close()
+        throws DAOException {
+
+        this.connection = null;
+
+    }
+
+    protected abstract Iterator<T> doFindAll(long page, long count)
+        throws SQLException, DAOException;
+
+    protected abstract T doFindById(Object id)
+        throws SQLException, DAOException;
+
+    protected abstract void doRemove(int id)
+        throws SQLException, DAOException;
+
+    protected abstract void doSave(T obj)
+        throws SQLException, DAOException;
+
+    protected ResultSet executeFind(String query, Object...args) {
+
+        PreparedStatement stmt = this.bindStatement(query, args);
 
         return this.executeQuery(stmt);
 
@@ -131,6 +139,12 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
                     return JdbcDAO.this.doFindAll(page, count);
 
                 } catch (SQLException e) {
+
+                    e.printStackTrace();
+
+                    throw new DatabaseAccessException("Erro ao buscar", e);
+
+                } catch (DAOException e) {
 
                     e.printStackTrace();
 
@@ -234,19 +248,65 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
 
     }
 
-    @Override
-    public void save(T obj)
-        throws DAOException {
+    private void restoreAutoCommit(boolean autoCommitValue) {
 
         try {
 
-            this.doSave(obj);
+            this.getConnection().setAutoCommit(autoCommitValue);
 
         } catch (SQLException e) {
 
             e.printStackTrace();
 
+            throw new DatabaseAccessException(e.getMessage(), e);
+
+        }
+
+    }
+
+    private void rollback() {
+
+        try {
+
+            this.getConnection().rollback();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+            throw new DatabaseAccessException(e.getMessage(), e);
+
+        }
+
+    }
+
+    @Override
+    public void save(T obj)
+        throws DAOException {
+
+        boolean autoCommitValue = true;
+
+        try {
+
+            autoCommitValue = this.getConnection().getAutoCommit();
+
+            this.getConnection().setAutoCommit(false);
+
+            this.doSave(obj);
+
+            this.getConnection().commit();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+
+            this.rollback();
+
             throw new DAOException("Falha ao salvar", e);
+
+        } finally {
+
+            this.restoreAutoCommit(autoCommitValue);
 
         }
 

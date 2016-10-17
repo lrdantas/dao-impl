@@ -10,7 +10,6 @@ import java.util.UUID;
 
 import io.dao.common.DAOException;
 
-import io.dao.mysql.EnderecoDAO;
 import io.dao.mysql.UsuarioDAO;
 
 import io.model.Endereco;
@@ -48,18 +47,21 @@ public class App {
     public void run(Connection connection)
         throws DAOException, SQLException {
 
-        int size = 5;
+        final int SIZE = 1;
 
         UsuarioDAO usuarioDAO = new UsuarioDAO(connection);
-        EnderecoDAO enderecoDAO = new EnderecoDAO(connection);
 
-        List<Usuario> cache = new ArrayList<Usuario>(size);
+        List<Usuario> cache = new ArrayList<Usuario>(SIZE);
 
         System.out.println("\n:: Inserindo usuários de teste");
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < SIZE; i++) {
 
             Usuario usuario = new Usuario("José Augusto #" + UUID.randomUUID());
+            Endereco endereco = new Endereco(
+                "R. dos Programas", "1", "IOException", "Natal", "RN", "59056000");
+
+            usuario.addEndereco(endereco);
 
             usuarioDAO.save(usuario);
 
@@ -69,13 +71,23 @@ public class App {
 
         }
 
-        Iterable<Endereco> enderecos = enderecoDAO.findByUsuario(usuarioDAO.findById(1));
+        Usuario fstUsuario = cache.get(0);
+
+        /* for (Usuario usuario : usuarioDAO.findAll(0, 1)) {
+
+            fstUsuario = usuario;
+
+        } */
+
+        Iterable<Endereco> enderecos = fstUsuario.getEnderecos();
 
         for (Endereco endereco : enderecos) {
 
             System.out.println(endereco);
 
         }
+
+        System.exit(0);
 
         System.out.println("\n:: Listando alguns Usuários Cadastrados");
 

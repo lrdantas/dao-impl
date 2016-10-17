@@ -10,7 +10,9 @@ import java.sql.Types;
 import java.util.Iterator;
 
 import io.dao.common.DAOException;
+import io.dao.common.LazyCollection;
 
+import io.model.Endereco;
 import io.model.Usuario;
 
 /**
@@ -18,7 +20,7 @@ import io.model.Usuario;
  */
 public class UsuarioDAO extends JdbcDAO<Usuario> {
 
-    private EnderecoDAO enderecoDAO;
+    private final EnderecoDAO enderecoDAO;
 
     public UsuarioDAO(Connection connection) {
 
@@ -38,7 +40,7 @@ public class UsuarioDAO extends JdbcDAO<Usuario> {
 
     @Override
     protected Iterator<Usuario> doFindAll(long page, long count)
-        throws SQLException {
+        throws SQLException, DAOException {
 
         String query = ""
             + "SELECT u.id, u.nome "
@@ -55,7 +57,7 @@ public class UsuarioDAO extends JdbcDAO<Usuario> {
 
     @Override
     protected Usuario doFindById(Object id)
-        throws SQLException {
+        throws SQLException, DAOException {
 
         String query = ""
             + "SELECT u.id, u.nome "
@@ -79,7 +81,7 @@ public class UsuarioDAO extends JdbcDAO<Usuario> {
 
     @Override
     protected void doRemove(int id)
-        throws SQLException {
+        throws SQLException, DAOException {
 
         String query = "DELETE FROM usuario WHERE id = ?";
 
@@ -89,18 +91,18 @@ public class UsuarioDAO extends JdbcDAO<Usuario> {
 
         stmt.setLong(1, id);
 
-        int affetectRows = stmt.executeUpdate();
+        int affectedRows = stmt.executeUpdate();
 
         System.out.println(String.format(
             "Affected rows: %d",
 
-            affetectRows));
+            affectedRows));
 
     }
 
     @Override
-    protected void doSave(Usuario obj)
-        throws SQLException {
+    protected void doSave(Usuario usuario)
+        throws SQLException, DAOException {
 
         String query = ""
             + "INSERT INTO usuario (id, nome) "
@@ -110,41 +112,99 @@ public class UsuarioDAO extends JdbcDAO<Usuario> {
 
         PreparedStatement stmt = this.getStmtSave(query);
 
-        if (obj.getId() == 0) {
+        if (usuario.getId() == 0) {
 
             stmt.setNull(1, Types.BIGINT);
 
         } else {
 
-            stmt.setLong(1, obj.getId());
+            stmt.setLong(1, usuario.getId());
 
         }
 
-        stmt.setString(2, obj.getNome());
+        stmt.setString(2, usuario.getNome());
 
-        int affetectRows = stmt.executeUpdate();
+        int affectedRows = stmt.executeUpdate();
 
         ResultSet generatedKeys = stmt.getGeneratedKeys();
 
-        if (obj.getId() == 0 && generatedKeys != null) {
+        if (usuario.getId() == 0 && generatedKeys != null) {
 
             generatedKeys.next();
 
-            obj.setId(generatedKeys.getInt(1));
+            usuario.setId(generatedKeys.getInt(1));
+
+        }
+
+        for (Endereco endereco : usuario.getEnderecos()) {
+
+            enderecoDAO.doSave(endereco);
+
+            this.saveEndereco(usuario, endereco);
 
         }
 
         System.out.println(String.format(
             "Affected rows: %d",
 
-            affetectRows));
+            affectedRows));
+
+    }
+
+    private void saveEndereco(Usuario usuario, Endereco endereco)
+        throws SQLException {
+
+        String query = ""
+            + "INSERT INTO usuario_endereco (usuario_id, endereco_id) "
+            + "VALUES (?, ?) "
+            + "ON DUPLICATE KEY UPDATE "
+            + " usuario_id = VALUES(usuario_id) ";
+
+        PreparedStatement stmt = super.bindStatement(
+            query,
+
+            usuario.getId(),
+            endereco.getId());
+
+        stmt.executeUpdate();
 
     }
 
     @Override
-    protected Iterator<Usuario> iterator(ResultSet resultSet) {
+    protected Iterator<Usuario> iterator(final ResultSet resultSet) {
 
-        return new UsuarioIterator(resultSet);
+        final Iterator<Usuario> iter = new UsuarioIterator(resultSet);
+
+        return new Iterator<Usuario>() {
+
+            @Override
+            public boolean hasNext() {
+
+                return iter.hasNext();
+            }
+
+            @Override
+            public Usuario next() {
+
+                final Usuario usuario = iter.next();
+
+                Iterable<Endereco> enderecos = new Iterable<Endereco>() {
+
+                    @Override
+                    public Iterator<Endereco> iterator() {
+
+                        return enderecoDAO.findByUsuario(usuario).iterator();
+
+                    }
+
+                };
+
+                usuario.setEnderecos(new LazyCollection<Endereco>(enderecos));
+
+                return usuario;
+            }
+
+        };
 
     }
 

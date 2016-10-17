@@ -18,4 +18,17 @@ public interface IDAO<T> {
 
     void save(T obj) throws DAOException;
 
+    //default T findFirst()
+    //    throws DAOException {
+    //
+    //    for (T obj : this.findAll(0, 1)) {
+    //
+    //        return obj;
+    //
+    //    }
+    //
+    //    return null;
+    //
+    //}
+
 }
