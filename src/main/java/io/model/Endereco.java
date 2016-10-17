@@ -19,6 +19,20 @@ public class Endereco {
 
     public Endereco() { }
 
+    public Endereco(
+        String logradouro, String numero, String bairro, String cidade,
+        String uf, String cep) {
+
+        this.logradouro = logradouro;
+        this.numero = numero;
+        this.bairro = bairro;
+
+        this.cidade = cidade;
+        this.uf = uf;
+
+        this.cep = cep;
+    }
+
     public String getBairro() {
 
         return this.bairro;
@@ -93,7 +107,9 @@ public class Endereco {
     public String toString() {
 
         return String.format(
-            "%s, %s - %s : %s/ %s %s",
+            "#%d: %s, %s - %s : %s/ %s %s",
+
+            this.getId(),
 
             this.getLogradouro(),
             this.getNumero(),

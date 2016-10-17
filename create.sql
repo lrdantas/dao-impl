@@ -44,12 +44,10 @@ CREATE TABLE IF NOT EXISTS `endereco` (
 
 CREATE TABLE IF NOT EXISTS `usuario_endereco` (
 
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-
   `usuario_id` INT UNSIGNED NOT NULL,
   `endereco_id` INT UNSIGNED NOT NULL,
 
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`usuario_id`, `endereco_id`),
 
   CONSTRAINT `fk_endereco_usuario__usuario`
     FOREIGN KEY (`usuario_id`)
