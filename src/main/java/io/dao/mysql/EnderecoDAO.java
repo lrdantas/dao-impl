@@ -6,9 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+
 import java.util.Iterator;
 
 import io.dao.common.DAOException;
+import io.dao.common.EnderecoIterator;
+import io.dao.common.JdbcDAO;
 
 import io.model.Endereco;
 import io.model.Usuario;

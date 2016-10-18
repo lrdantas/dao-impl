@@ -10,7 +10,9 @@ import java.sql.Types;
 import java.util.Iterator;
 
 import io.dao.common.DAOException;
+import io.dao.common.JdbcDAO;
 import io.dao.common.LazyCollection;
+import io.dao.common.UsuarioIterator;
 
 import io.model.Endereco;
 import io.model.Usuario;

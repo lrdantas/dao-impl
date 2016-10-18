@@ -1,5 +1,5 @@
 
-package io.dao.mysql;
+package io.dao.common;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,10 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.Iterator;
-
-import io.dao.common.DAOException;
-import io.dao.common.DatabaseAccessException;
-import io.dao.common.IDAO;
 
 /**
  * @author José Nascimento <joseaugustodearaujonascimento@gmail.com>

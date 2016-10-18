@@ -1,5 +1,5 @@
 
-package io.dao.mysql;
+package io.dao.common;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
