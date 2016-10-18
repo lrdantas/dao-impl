@@ -2,30 +2,47 @@
 package io.dao;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+
+import io.dao.common.DAOException;
 
 /**
  * @author José Nascimento <joseaugustodearaujonascimento@gmail.com>
- *
  */
 public class MainThread extends Thread {
 
     @Override
     public void run() {
 
-        Connection connection;
-
         try {
-            connection = App.factory.openConnection();
 
-            new App().run(connection);
+            doRun();
 
-            connection.close();
-
-        } catch (Exception e) {
+        } catch (SQLException e) {
 
             e.printStackTrace();
 
-            this.interrupt();
+        } catch (DAOException e) {
+
+            e.printStackTrace();
+
+        }
+
+    }
+
+    private void doRun()
+        throws SQLException, DAOException {
+
+        Connection connection = App.factory.openConnection();
+
+        try {
+
+            new App().doRun(connection);
+
+        } finally {
+
+            connection.close();
+
         }
 
     }

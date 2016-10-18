@@ -44,7 +44,7 @@ public class App {
 
     }
 
-    public void run(Connection connection)
+    public void doRun(Connection connection)
         throws DAOException, SQLException {
 
         final int SIZE = 1;
