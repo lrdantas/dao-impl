@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.sql.Types;
 import java.util.Iterator;
 
 /**
@@ -37,7 +37,11 @@ public abstract class JdbcDAO<T> implements IDAO<T> {
 
                 Object arg = args[i];
 
-                if (arg instanceof Integer) {
+                if (arg == null) {
+
+                    stmt.setNull(paramIndex, Types.NULL);
+
+                } if (arg instanceof Integer) {
 
                     stmt.setInt(paramIndex, (Integer) arg);
 
